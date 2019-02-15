@@ -1,0 +1,93 @@
+<title>{{parent.email}}</title>
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header" data-background-color="red">
+        <h4 class="title">Parent Details</h4>
+        <h2>{{parent.firstName}} {{parent.lastName}}</h2>
+       <button class="btn btn-primary btn-sm" [routerLink]="['/home/dashboard']">Back</button>
+       <button class="btn  btn-default btn-sm" (click)="ngOnInit()">
+         <i class="material-icons">refersh</i>
+         refresh</button>
+      </div>
+      <div class="card-content">
+        <div class="row">
+          <div class="col-md-6">
+            <h5 class="label label-danger">Delegtes</h5>
+            <div class="card-content table-responsive">
+              <table class="table table-hover">
+                <thead class="text-warning">
+                  <tr>
+                    <th>ID</th>
+                    <th>Delegates Name</th>
+          
+          
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let delegate of helpers">
+                    <td>{{delegate._id}}</td>
+                    <td>{{delegate.lastname}} {{delegate.middlename}} {{delegate.firstname}}</td>
+          
+                  </tr>
+                </tbody>
+              </table>
+              
+            </div>
+          
+          </div>
+          <div class="col-md-6">
+            <h5 class="label label-danger">Children</h5>
+            <div class="card-content table-responsive">
+              <div class="card-content table-responsive">
+                <table class="table table-hover">
+                  <thead class="text-warning">
+                    <tr>
+                      <th>ID</th>
+                      <th>Childs Name</th>
+          
+          
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let child of children">
+                      <td>{{child._id}}</td>
+                      <td>{{child.lastname}} {{child.middlename}} {{child.firstname}}</td>
+          
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Front</div>
+      <div class="card-content">
+        <div class="row">
+          <div class="col-sm-8">
+            <div class="label-primary h2">Collection Card</div>
+            <div class="card-title h4">Fullname: {{parent.designation}} {{parent.firstName}} {{parent.lastName}}
+</div>
+            <div class="card-title h4">Relationship: {{parent.relationship}}
+</div>
+          </div>
+            <div class="col-sm-4">
+              <ngx-qrcode qrc-errorCorrectionLevel="H" qrc-value="{{parent._id}}" qrc-version="10" qrc-element-type="canvas"></ngx-qrcode>
+            </div>
+        </div>
+       
+      
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Back</div>
+      <div class="card-content">
+        This card is property of Hivazinc technologies. if found, please return to our headquarters or call us on .................., thanks for your cooperation and understanding
+      </div>
+      <div class="label-default">Hivazinc Tech.</div>
+    </div>
+  </div>
+</div>

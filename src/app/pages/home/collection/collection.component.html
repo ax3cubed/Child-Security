@@ -1,0 +1,164 @@
+<title>{{title}}</title>
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="title">Collection Process</h4>
+                    </div>
+                    <div class="card-content table-responsive">
+                        <mat-horizontal-stepper>
+                           
+                            <mat-step>
+                                <form class="form" name="form" (ngSubmit)="f.form.valid" #f="ngForm" novalidate>
+                                <ng-template matStepLabel> Admin Verify</ng-template>
+                                <mat-card>
+                                    <mat-card-title>
+                                        Admin Attendant
+                                    </mat-card-title>
+                                    <mat-card-content>
+                                    Email: <div class="label label-primary">{{adminarr.email}}</div>
+                                    <mat-card>
+                                    <mat-form-field>
+                                           <input matInput name="adminFirstname" [(ngModel)]="adminarr.firstName">
+                                        </mat-form-field>
+                                       
+                                        <mat-form-field>
+                                           <input matInput name="adminLastname" [(ngModel)]="adminarr.lastName">
+                                        </mat-form-field>
+                                        <mat-form-field>
+                                           <input matInput [disabled]="true" [(ngModel)]="model.verified_by" placeholder="Id" name="verified_by" #verified_by="ngModel" >
+                                    </mat-form-field>
+                                    </mat-card>
+                                    </mat-card-content>
+                                </mat-card>
+                                <div>
+                                    <button class="btn btn-default" mat-button matStepperNext>Next</button>
+                                </div>
+                                </form>
+                            </mat-step>
+
+                            <mat-step>
+                                <form class="form" name="form" (ngSubmit)="f.form.valid" #f="ngForm" novalidate>
+                                <ng-template matStepLabel> Parent Verify</ng-template>
+                              
+                                <mat-form-field>
+                                    <mat-select  name="parent_id" #parent_id="ngModel" [(ngModel)]="model.parent_id" placeholder="Parents">
+                                        <mat-option (click)="getChildren(parent._id)" *ngFor="let parent of parents" [value]="parent._id">
+                                             <div (click)="getHelper(parent._id)">{{ parent.firstName }} {{parent.lastName}}</div>
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                               <mat-slide-toggle [disabled]="!parent_id.value" name="parent_verified" #parent_verified="ngModel" [(ngModel)]="model.parent_verified">
+                                   Parent Verified?
+                               </mat-slide-toggle>
+
+                               
+                                <!-- <div *ngFor="let child of children">
+                                     {{child.firstname}} {{child.lastname}}
+                                </div> -->
+                                <mat-form-field class="demo-chip-list">
+                                    <mat-chip-list>
+                                        <mat-chip *ngFor="let child of children">
+                                            {{child.firstname}} {{child.lastname}}
+                                           
+                                        </mat-chip>
+                                        <!-- <input matInput [disabled]="true" placeholder="Children" [matChipInputFor]="children" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" /> -->
+                                    </mat-chip-list>
+                                </mat-form-field>
+                                
+                                <button class="btn btn-primary" mat-button matStepperPrevious>Previous</button>
+                                <button class="btn btn-default" mat-button matStepperNext>Next</button>
+                                </form>
+                            </mat-step>
+                            
+                            <mat-step>
+                                <form class="form" name="form" (ngSubmit)="f.form.valid" #f="ngForm" novalidate>
+                                <ng-template matStepLabel>Helper Verify</ng-template>
+                                  <mat-card>
+
+                                      <mat-checkbox (click)="setDisabled($event)" [(ngModel)]="model.helper_influence" aria-labelledby="Use Helpers?" labelPosition="before" #helper_influence="ngModel" name="helper_influence" color="warn">
+                                          Use Helpers?
+                                      </mat-checkbox>
+                                </mat-card>
+                                <mat-card>
+                                    <mat-form-field>
+                                        <mat-select [disabled]="!disabled" name="helper_id" #helper_id="ngModel" [(ngModel)]="model.helper_id" placeholder="Helpers">
+                                            <mat-option (click)="getSingleHelper(helper._id)" *ngFor="let helper of helpers" [value]="helper._id">
+                                                {{helper.firstname }} {{helper.lastname}}
+                                    
+                                            </mat-option>
+                                        </mat-select>
+                                    
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <input matInput [(ngModel)]="helperData.firstname" name="helper_firstName">
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <input matInput [(ngModel)]="helperData.lastname" name="helper_lastName">
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <input matInput [(ngModel)]="helperData.helper_relationship" name="helper_relationship">
+                                    </mat-form-field>
+                                    </mat-card>
+                               <mat-card>
+                                    <mat-slide-toggle [disabled]="!helper_id.value" name="helper_verified" #helper_verified="ngModel" [(ngModel)]="model.helper_verified">
+                                        Helper Verified?
+                                    </mat-slide-toggle>
+                               </mat-card>
+                            <button class="btn btn-primary" mat-button matStepperPrevious>Previous</button>
+                            <button class="btn btn-default" mat-button matStepperNext>Next</button>
+                                </form>   
+                        </mat-step>
+                            <mat-step>
+                                <form class="form" name="form" (ngSubmit)="f.form.valid" #f="ngForm" novalidate>
+
+                                <mat-card>
+                                    <ng-template matStepLabel> Overview</ng-template>
+                                    <mat-card-title>
+                                        Time of Collection
+                                    </mat-card-title>
+                                    <mat-card-content>
+                                        {{date}}
+                                    </mat-card-content>
+                                </mat-card>
+                                <mat-card>
+                                    <mat-card-title>
+                                        Parent
+                                    </mat-card-title>
+                                    <mat-card-content>
+                                             {{parent_id.value}}
+                                    </mat-card-content>
+                                </mat-card>
+                                <mat-card *ngIf="helper_id.value">
+                                    <mat-card-title>
+                                        Helper
+                                    </mat-card-title>
+                                    <mat-card-content>
+                                       {{helper_id.value}}
+                                    </mat-card-content>
+                                    <mat-card-content>
+                                        <mat-chip-list>
+                                            <mat-chip *ngFor="let child of children">
+                                                {{child.firstname}} {{child.lastname}}
+                                        
+                                            </mat-chip>
+                                            <!-- <input matInput [disabled]="true" placeholder="Children" [matChipInputFor]="children" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" /> -->
+                                        </mat-chip-list>
+                                    </mat-card-content>
+                                </mat-card>
+                                <mat-card>
+                                <button class="btn btn-primary" mat-button matStepperPrevious>Previous</button>
+                                <button class="btn btn-default" mat-button matStepperNext>Next</button>
+                            </mat-card>
+                                </form>
+                        </mat-step>
+                        
+                        </mat-horizontal-stepper>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
